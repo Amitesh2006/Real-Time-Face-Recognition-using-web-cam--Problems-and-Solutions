@@ -7,18 +7,14 @@ using namespace cv::face;
 using namespace std;
 
 int main() {
-    // Load Haar Cascade
     CascadeClassifier faceCascade;
     if (!faceCascade.load("haarcascade_frontalface_default.xml")) {
         cout << "Error loading Haar Cascade file!" << endl;
         return -1;
     }
-
-    // Load trained face recognizer
     Ptr<LBPHFaceRecognizer> recognizer = LBPHFaceRecognizer::create();
     recognizer->read("face_trainer.yml");
 
-    // Open webcam
     VideoCapture cap(0);
     if (!cap.isOpened()) {
         cout << "Error opening webcam!" << endl;
@@ -33,10 +29,10 @@ int main() {
         if (frame.empty())
             break;
 
-        // Convert to grayscale
+
         cvtColor(frame, gray, COLOR_BGR2GRAY);
 
-        // Detect faces
+        
         faceCascade.detectMultiScale(
             gray,
             faces,
@@ -52,7 +48,7 @@ int main() {
             int label;
             double confidence;
 
-            // Predict face
+            
             recognizer->predict(faceROI, label, confidence);
 
             string name;
@@ -62,10 +58,10 @@ int main() {
                 name = "Unknown";
             }
 
-            // Draw rectangle
+            
             rectangle(frame, faces[i], Scalar(0, 255, 0), 2);
 
-            // Display name
+        
             putText(
                 frame,
                 name,
@@ -79,7 +75,7 @@ int main() {
 
         imshow("Real-Time Face Recognition", frame);
 
-        if (waitKey(10) == 27)  // Press ESC to exit
+        if (waitKey(10) == 27)  
             break;
     }
 
